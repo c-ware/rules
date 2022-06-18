@@ -15,6 +15,7 @@ consistent code. Part of achieving consistent code, we need to have a
 consistent file layout and code style. This guide aims to provide the
 ground-work for this.
 
+.SH NAMING RULES
 For starters, the file and directory layout of a C-Ware project has some
 fairly strict rules that \fBmust\fR be followed.
 .IP - 0.4i
@@ -31,6 +32,7 @@ The maximum path length of any file (which includes the file extension), from,
 and including the root project directory must be within or at 60 characters.
 .IP "" 0.0i
 
+.SH PROJECT LAYOUT
 Aside from file and directory naming rules, C-Ware projects must also have a
 somewhat predictable structure. All of these paths can be assumed to be tacked
 on to the name of the project that is being written. It should also be noted
@@ -80,5 +82,53 @@ although \fBdocgen\fR(cware) is recommended.
 .RS 0.4i
 The scripts directory. This directory will contain scripts that perform various
 operations on the project as a whole, or do basic maintenance like running tests,
-loading new documentation, and creating Makefiles.
+loading new documentation, and creating Makefiles. There is no strict rules on
+what this directory should contain specifically, however.
 .RE
+
+.SH LICENSING
+Next, licensing. The C-Ware project uses its own modification of the 2-Clause
+BSD license for its projects. The purpose of the license is to preserve fork
+history for the purpose of archival. Each \fBsource\fR file in C-Ware (meaning
+any file used in compilation in the \fBsrc\fR directory) must have this license
+at the top of each file, and each project must have a LICENSE file with this
+license inside of it (except for the comment syntax). The license is as follows,
+with the C comment for easy insertion.
+
+/*
+ * C-Ware License
+ * 
+ * Copyright (c) 2022, C-Ware
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Redistributions of modified source code must append a copyright notice in
+ *    the form of 'Copyright <YEAR> <NAME>' to each modified source file's
+ *    copyright notice, and the standalone license file if one exists.
+ *
+ * A "redistribution" can be constituted as any version of the source code
+ * that is intended to comprise some other derivative work of this code. A
+ * fork created for the purpose of contributing to any version of the source
+ * does not constitute a truly "derivative work" and does not require listing.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.br
+*/
