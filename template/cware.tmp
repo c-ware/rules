@@ -1,0 +1,80 @@
+include(macros.m4)
+
+HEADER()
+
+.SH NAME
+cware - introduction to c-ware
+
+.SH DESCRIPTION
+C-Ware is a software project that aims to produce heavily portable, and
+consistent code. Part of achieving consistent code, we need to have a
+consistent file layout and code style. This guide aims to provide the
+ground-work for this.
+
+For starters, the file and directory layout of a C-Ware project has some
+fairly strict rules that \fBmust\fR be followed.
+.IP LIST_CHAR() LIST_OFFSET()
+File and directory names \fBmust\fR be 8 characters or less, and the file
+extension must be 3 characters or less. The only exception to this rule is
+documentation, which the names and extensions of which can be any length.
+.IP LIST_CHAR() LIST_OFFSET()
+Any C-Ware project is \fBforbidden\fR from making use of recursive Makefiles.
+They make projects harder to maintain, and remain consistent. Especially in
+situations where we must use dialects of \fBmake\fR(1). Use a tool like \fBmakegen\fR(cware)
+to generate single Makefiles for arbitrary dialects of \fBmake\fR(1).
+.IP LIST_CHAR() LIST_OFFSET()
+The maximum path length of any file (which includes the file extension), from,
+and including the root project directory must be within or at 60 characters.
+.IP "" 0.0i
+
+Aside from file and directory naming rules, C-Ware projects must also have a
+somewhat predictable structure. All of these paths can be assumed to be tacked
+on to the name of the project that is being written. It should also be noted
+that all of these directories are \fIrequired\fR unless stated otherwise.
+
+\fBsrc/\fR
+.RS SHIFT_OFFSET()
+The source code directory. Other than the name of the directory being \fIsrc\fR,
+there are no rules on how this directory's contents should be structured.
+.RE
+
+\fBtests/\fR
+.RS SHIFT_OFFSET()
+The tests directory. This directory will contain files which test different
+components of the library, or software. All C-Ware projects must have tests.
+.RE
+
+\fBtests/assets/\fR
+.RS SHIFT_OFFSET()
+The assets directory. This directory will contain \fBstatic\fR files which are used
+by some, or all of the tests. These assets should be considered \fBread-only\fR
+by the test writers, and as such should not be modified by the tests.
+.RE
+
+\fBtests/temp/\fR
+.RS SHIFT_OFFSET()
+The temporary diirectory. This is a directory that will be cleared before \fBand\fR
+after tests are executed, and can be considered temporary storage. All files in
+this directory should be considered vulnerable to a lack of thread safety, so
+make sure there are no conflicts between tests that use this directory.
+.RE
+
+\fBtests/common.h\fR
+.RS SHIFT_OFFSET()
+The common file that all tests will include. This contains data that all tests
+will need to run, or that tests in the future may use.
+.RE
+
+\fBdoc/\fR
+.RS SHIFT_OFFSET()
+The documentation directory. This should contain documentation for the program
+or library is generated with \fBdocgen\fR(cware), or ones that are hand written;
+although \fBdocgen\fR(cware) is recommended.
+.RE
+
+\fBscripts\fR
+.RS SHIFT_OFFSET()
+The scripts directory. This directory will contain scripts that perform various
+operations on the project as a whole, or do basic maintenance like running tests,
+loading new documentation, and creating Makefiles.
+.RE
