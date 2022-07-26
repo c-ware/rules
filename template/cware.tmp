@@ -128,3 +128,71 @@ with the C comment for easy insertion.
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 .br
 */
+
+.SH SAFETY
+Being a C project, security vulnerabilities will be easier to create. To try and
+limit the number of security vulnerabilities, and make debugging easier, there are
+extremely strict rules for C-Ware projects that \fBmust\fR be followed. While these
+may limit the speed of the program, once we are confident in the safety of the
+program, the safety checks can always be turned off.
+
+.IP LIST_CHAR() LIST_OFFSET()
+Every function, public and private, must perform checks with the \fBliberror\fR(cware)
+library for every pointer that is accessed to make sure it is not NULL. Repeated
+accesses do not warrant repeated checks. The pointer should only be checked for
+NULL if is reassigned to by some other part of the program, whether that be in the
+same scope of the variable, or another function.
+
+.IP LIST_CHAR() LIST_OFFSET()
+All variables \fBmust\fR be initialized before they are used. Stack arrays should
+have their entire contents initialized. The initialization should take place with
+the \fBLIBERROR_INIT\fR(cware) macro, and will initialize it with all zeros.
+
+.IP LIST_CHAR() LIST_OFFSET()
+Any form of indexing of an array must be bounds checked before the index can take place.
+Integration with libraries like \fBcarray\fR(cware) exist inside of \fBliberror\fR(cware),
+as well as macros for raw C arrays. Other than that, this rule is rather self explanatory.
+
+.IP LIST_CHAR() LIST_OFFSET()
+Under no circumstances should a variadic argument have a sentinel that is a NULL pointer.
+Variadic arguments should have their length known through the first parameter, meaning
+that the number of variadic arguments must be the last positional argument. For example,
+
+int sum_integers(int number_of_integers, ...);
+
+This is because it makes the C compiler explicitly enforce the need for the programmer
+to tell the function how many variadc arguments to expect, as opposed to potentially
+forgetting to add NULL at the end.
+
+.IP LIST_CHAR() LIST_OFFSET()
+The return values of any function which can return a value that indicates success or
+failure \fBmust\fR be handled. The \fBliberror\fR(cware) library has macros for handling
+more generic problems, and some for fairly specific situations like malloc failure and
+file opening failures.
+
+.IP LIST_CHAR() LIST_OFFSET()
+Many of the security vulnerabilities often found in C code are buffer overruns/overflows,
+so a lot of attention must be given to preventing these, or letting the programmer know
+when they are vulnerable to them.  Stack strings must always be declared with an additional
+two bytes at the end of them.  One for the NUL byte, and one for determining if the buffer
+was written past its expected size, which is useful for diagnostics. For example.
+
+#define ARRAY_LENGHTH   6 + 1   /* +1 for the overflow detection */
+.br
+char arr[ARRAY_LENGHTH + 1];    /* +1 for the NUL byte if a NUL-byte writing function
+                                   like strncat is given ARRAY_LENGTH as the max, as
+                                   it will write the NUL byte at the (ARRAY_LENGTH + 1)'th
+                                   byte. This one is just a safety measure, of course. */
+
+As a practical example, if we perform an \fBfread\fR(3) from \fBstdin\fR(3), we will allow
+7 bytes to be read, but if the 7th byte is read (or, following the previous rule,
+arr[ARRAY_LENGTH - 1] is not NUL, since it should be initialized as 0 before use), then
+we can produce an error message for the user.
+.IP "" 0.0i
+
+Programmers make mistakes. That is an inevitability of writing code. That being said, it
+is really not that difficult to perform audits to make sure even these most basic of
+security checks are performed. It can be as simple as grepping all source files for 
+an opening left bracket, and checking if a bounds check is done, or as aggressive as a
+fuzzing. In the end, if speed is a concern, at least we can turn off the safety checks
+once we are confident, right?
