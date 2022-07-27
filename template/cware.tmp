@@ -3,7 +3,7 @@ include(macros.m4)
 HEADER()
 
 .SH NAME
-cware - introduction to c-ware
+cware - introduction to C-Ware
 
 .SH DESCRIPTION
 C-Ware is a software project that aims to produce heavily portable, and
@@ -20,8 +20,8 @@ extension must be 3 characters or less. The only exception to this rule is
 documentation, which the names and extensions of which can be any length.
 .IP LIST_CHAR() LIST_OFFSET()
 Any C-Ware project is \fBforbidden\fR from making use of recursive Makefiles.
-They make projects harder to maintain, and remain consistent. Especially in
-situations where we must use dialects of \fBmake\fR(1). Use a tool like \fBmakegen\fR(cware)
+They make projects harder to maintain, and remain consistent; especially in
+situations where we must use older dialects of \fBmake\fR(1). Use a tool like \fBmakegen\fR(cware)
 to generate single Makefiles for arbitrary dialects of \fBmake\fR(1).
 .IP LIST_CHAR() LIST_OFFSET()
 The maximum path length of any file (which includes the file extension), from,
@@ -71,7 +71,8 @@ will need to run, or that tests in the future may use.
 .RS SHIFT_OFFSET()
 The documentation directory. This should contain documentation for the program
 or library is generated with \fBdocgen\fR(cware), or ones that are hand written;
-although \fBdocgen\fR(cware) is recommended.
+although \fBdocgen\fR(cware) is recommended. Documentation should at least consist
+of UNIX manual pages.
 .RE
 
 \fBscripts\fR
@@ -79,8 +80,19 @@ although \fBdocgen\fR(cware) is recommended.
 The scripts directory. This directory will contain scripts that perform various
 operations on the project as a whole, or do basic maintenance like running tests,
 loading new documentation, and creating Makefiles. There is no strict rules on
-what this directory should contain specifically, however.
+what this directory should contain specifically, however. The scripts should not
+have to be ran by the end user, and UNIX shell scripts are preferred.
 .RE
+
+.SH PORTABILITY
+At a minimum, C-Ware projects must be ANSI C89-compliant code. Any OS-specific 
+functionality should be guarded by #ifdef statements to ensure that the correct
+approach for one OS does not overlap with another OS. Ideally, C-Ware projects
+would support any system that is POSIX.1 compliant. This includes UNIX, DOS,
+Windows, OS X (UNIX), Linux (UNIX), OpenVMS, and OS/2. Of course, not many of 
+these are still in active use, but supporting old platforms also nets you support
+for embedded systems (with greatly-reduced C runtime libraries).
+
 
 .SH LICENSING
 Next, licensing. The C-Ware project uses its own modification of the 2-Clause
@@ -134,7 +146,9 @@ Being a C project, security vulnerabilities will be easier to create. To try and
 limit the number of security vulnerabilities, and make debugging easier, there are
 extremely strict rules for C-Ware projects that \fBmust\fR be followed. While these
 may limit the speed of the program, once we are confident in the safety of the
-program, the safety checks can always be turned off.
+program, the safety checks can always be turned off. Source code audits for security
+are highly advised, as memory leaks are only one part of secure software development.
+C-Ware projects should be designed with security in mind, not security as an afterthought.
 
 .IP LIST_CHAR() LIST_OFFSET()
 Every function, public and private, must perform checks with the \fBliberror\fR(cware)
@@ -188,6 +202,14 @@ As a practical example, if we perform an \fBfread\fR(3) from \fBstdin\fR(3), we 
 7 bytes to be read, but if the 7th byte is read (or, following the previous rule,
 arr[ARRAY_LENGTH - 1] is not NUL, since it should be initialized as 0 before use), then
 we can produce an error message for the user.
+
+.IP LIST_CHAR() LIST_OFFSET()
+Algorithmic-complexity attacks should not be overlooked. These attacks will cause even the
+most efficent programs to grind to a halt, violating the availability principle of good
+system security. Watch out for "low-hanging fruit" complexity attacks, such as tarpitted
+hashtables.
+
+
 .IP "" 0.0i
 
 Programmers make mistakes. That is an inevitability of writing code. That being said, it
@@ -195,4 +217,4 @@ is really not that difficult to perform audits to make sure even these most basi
 security checks are performed. It can be as simple as grepping all source files for 
 an opening left bracket, and checking if a bounds check is done, or as aggressive as a
 fuzzing. In the end, if speed is a concern, at least we can turn off the safety checks
-once we are confident, right?
+once we are confident, right? 
