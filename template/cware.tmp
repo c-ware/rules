@@ -26,7 +26,12 @@ to generate single Makefiles for arbitrary dialects of \fBmake\fR(1).
 .IP LIST_CHAR() LIST_OFFSET()
 The maximum path length of any file (which includes the file extension), from,
 and including the root project directory must be within or at 60 characters.
+.IP LIST_CHAR() LIST_OFFSET()
+All source files which contain a \fBmain\fR function must be called \fBmain.c\fR. If there
+is a need for multiple programs in a single C-Ware project, they should be separated across
+their own directories.
 .IP "" 0.0i
+
 
 .SH PROJECT LAYOUT
 Aside from file and directory naming rules, C-Ware projects must also have a
