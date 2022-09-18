@@ -227,3 +227,20 @@ security checks are performed. It can be as simple as grepping all source files 
 an opening left bracket, and checking if a bounds check is done, or as aggressive as a
 fuzzing. In the end, if speed is a concern, at least we can turn off the safety checks
 once we are confident, right? 
+
+.SH OS Detection
+Some operating systems do not have any helpful OS detection mechanism through compiler
+macros, and so for all C-Ware projects, if it supports one of the following operating
+systems, please use the corresponding macro to detect if its being compiled on that
+operating system.
+
+.TS
+tab(;);
+l l l
+_ _ _
+l l l
+.
+Operating System;Macro
+UNIXWare;__UNIXWARE__
+QuasijarusBSD;__QuasiBSD__
+.TE
