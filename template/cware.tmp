@@ -228,7 +228,8 @@ once we are confident, right?
 Some operating systems do not have any helpful OS detection mechanism through compiler
 macros, and so for all C-Ware projects, if it supports one of the following operating
 systems, please use the corresponding macro to detect if its being compiled on that
-operating system.
+operating system. They should be defined through the compiler, rather than in-file,
+usually in a Makefile.
 
 .TS
 tab(;);
@@ -240,3 +241,31 @@ Operating System;Macro
 UNIXWare;__UNIXWARE__
 QuasijarusBSD;__QuasiBSD__
 .TE
+
+.SH Portability Macros
+Since C-Ware also aims to support K&R compilers, we must design our code in a way to
+support their unique behavior. These are the macros that are to be used to help make
+writing code to support K&R more sane. These should be defined in \fBcwutils.h\fR
+
+\fBCWUTILS_GENERIC\fR
+.RS
+Some operating systems compilers, like on QuasiBSD, require calls to malloc to be casted.
+On some K&R compilers, the concept of a "void pointer" does not exist. Because of this,
+often times \fBchar *\fR was used to act as a generic pointer. To support systems which do
+not have \fBvoid *\fR, we use \fBCWUTILS_GENERIC\fR, which will expand to either \fBvoid *\fR
+or \fBchar *\fR depending on what the compiler supports.
+.RE
+
+\fBCWUTILS_NOPARAM\fR
+.RS
+Some operating systems compilers, like on ULTRIX and QuasiBSD, are K&R, and do not understand
+what the \fBvoid\fR in the parameters of a function mean. On operating systems which do not
+support this, this macro will expand to empty text. Otherwise, it will expand to \fBvoid\fR
+.RE
+
+\fBCWUTILS_NULL\fR
+.RS
+There is an inconsistency in inclusions on QuasiBSD, and more modern UNIXes. NULL is implicitly
+defined on there, as there is no \fBstddef.h\fR header, while on modern UNIXes, it is in that
+header. To avoid having an extra ifdef, we just have this implicitly defined.
+.RE
