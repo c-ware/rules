@@ -112,6 +112,40 @@ at the top of each file, and each project must have a LICENSE file with this
 license inside of it (except for the comment syntax). The license is as follows,
 with the C comment for easy insertion.
 
+.SH AUDITING
+At regular intervals, all C-Ware projects will be subjected to forced code 
+audits. This will consist of:
+.br
+- static analysis
+.br
+- black-box testing
+.br
+- white-box testing
+.br
+- fuzz testing
+.br
+The static analysis follows a traditional C source code analysis technique, 
+where the source is manually checked for things that would cause bugs by 
+good C programmers. This should weed out most issues.
+The black-bot test involves attempts to find bad input to functions 
+and programs that would result in a defeated security state or functionality 
+state.
+The white-box test involves almost the same plan of attack as a black-box 
+test, but, the testers will have access to the source code. This results in 
+the program under test needing to have excellent error-checking capability 
+(and, possibly error-correcting capability) in order to overcome test 
+failure at the hands of specially-crafted bad input. A good program should 
+never ever fail a white-box test.
+Fuzz testing, which is really a subtype of black-box testing, involves 
+entering random input into a program's input boxes to verify everything 
+from error checking to input validation. If any program crashes at the 
+hands of fuzzing, it can safely be assumed that it will fail at a black-box 
+test, and possibly a white-box test. 
+Testing like this is a vital component of C-Ware's assurance to safe C code; 
+after all, there is no reason to crash when the operator bangs their head on 
+the keyboard and generates possibly invalid input!
+.br
+
 /*
  * C-Ware License
  * 
